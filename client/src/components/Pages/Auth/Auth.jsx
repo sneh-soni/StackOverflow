@@ -73,7 +73,16 @@ const Auth = () => {
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <h4>Password</h4>
               {!isSignup && (
-                <p style={{ color: "#007ac6", fontSize: "13px" }}>
+                <p
+                  onClick={() => {
+                    navigate("/forgotPassword");
+                  }}
+                  style={{
+                    color: "#007ac6",
+                    fontSize: "13px",
+                    cursor: "pointer",
+                  }}
+                >
                   forgot password?
                 </p>
               )}

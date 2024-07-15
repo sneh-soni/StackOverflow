@@ -8,6 +8,8 @@ import DisplayQuestion from "./components/Pages/Questions/DisplayQuestion";
 import Tags from "./components/Pages/Tags/Tags";
 import Users from "./components/Pages/Users/Users";
 import UserProfile from "./components/Pages/UserProfile/UserProfile";
+import ForgotPassword from "./components/Pages/ForgotPassword/ForgotPassword";
+import ResetPassword from "./components/Pages/ForgotPassword/ResetPassword";
 
 const AllRoutes = ({ slideIn, handleSlideIn }) => {
   return (
@@ -42,6 +44,8 @@ const AllRoutes = ({ slideIn, handleSlideIn }) => {
           <UserProfile slideIn={slideIn} handleSlideIn={handleSlideIn} />
         }
       />
+      <Route path="/forgotpassword" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
     </Routes>
   );
 };

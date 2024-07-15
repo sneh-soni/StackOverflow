@@ -1,7 +1,10 @@
 import axios from "axios";
 
+// const API = axios.create({
+//   baseURL: "https://stackoverflow-f7nw.onrender.com",
+// });
 const API = axios.create({
-  baseURL: "https://stackoverflow-f7nw.onrender.com",
+  baseURL: "http://localhost:5000",
 });
 
 API.interceptors.request.use((req) => {
@@ -15,6 +18,10 @@ API.interceptors.request.use((req) => {
 
 export const logIn = (authData) => API.post("/user/login", authData);
 export const signUp = (authData) => API.post("/user/signup", authData);
+
+export const sendEmail = (Data) => API.post("/user/send-email", Data);
+export const resetPassword = (token, Data) =>
+  API.post(`/user/reset-password/${token}`, Data);
 
 export const getAllUsers = () => API.get("/user/getAllUsers");
 export const updateProfile = (id, updateData) =>
