@@ -10,6 +10,7 @@ const Auth = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ const Auth = () => {
     setIsSignup(!isSignup);
     setName("");
     setEmail("");
+    setPhone("");
     setPassword("");
   };
 
@@ -28,10 +30,14 @@ const Auth = () => {
       alert("Enter email and password");
     }
     if (isSignup) {
-      if (!name) {
-        alert("Enter a name to continue");
+      if (!name || !phone) {
+        alert("All fields are mandatory");
       }
-      dispatch(signup({ name, email, password }, navigate));
+      if (!/^\+[1-9]\d{1,14}$/.test(phone) || phone.length !== 13) {
+        alert("Invalid phone number");
+        return;
+      }
+      dispatch(signup({ name, email, password, phone }, navigate));
     } else {
       dispatch(login({ email, password }, navigate));
     }
@@ -44,18 +50,33 @@ const Auth = () => {
         <img src={icon} alt="stack overflow" className="login-logo" />
         <form onSubmit={handleSubmit}>
           {isSignup && (
-            <label htmlFor="name">
-              <h4>Display Name</h4>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
-              />
-            </label>
+            <>
+              <label htmlFor="name">
+                <h4>Display Name</h4>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={name}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
+                />
+              </label>
+              <label htmlFor="phone">
+                <h4>Phone number</h4>
+                <input
+                  type="text"
+                  id="phone"
+                  placeholder="+91XXXXXXXXXX"
+                  name="phone"
+                  value={phone}
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                  }}
+                />
+              </label>
+            </>
           )}
           <label htmlFor="email">
             <h4>Email</h4>

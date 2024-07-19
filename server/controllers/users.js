@@ -1,8 +1,9 @@
-import mongoose from "mongoose";
-import users from "../models/auth.js";
-import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 import nodemailer from "nodemailer";
+import twilio from "twilio";
+import users from "../models/auth.js";
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -92,6 +93,84 @@ export const sendEmail = async (req, res) => {
         return res.status(200).json({ message: "email sent successfully" });
       }
     });
+  } catch (error) {
+    return res.status(405).json({ message: error.message });
+  }
+};
+
+let otpStore = {};
+
+export const sendOTP = async (req, res) => {
+  const { phone } = req.body;
+
+  const phoneRegex = /^(?:\+91|91)?[789]\d{9}$/;
+
+  if (!phoneRegex.test(phone)) {
+    return res.status(400).json({
+      message: "Invalid phone number format",
+    });
+  }
+
+  const user = await users.findOne({ phoneNumber: phone });
+
+  if (!user) {
+    return res.status(404).send("User not found");
+  }
+
+  try {
+    const accountSid = process.env.TWILIO_ACCOUNT_SID;
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+    const client = twilio(accountSid, authToken);
+
+    const otp = Math.floor(1000 + Math.random() * 9000);
+    otpStore[phone] = {
+      otp: otp,
+      timestamp: Date.now(),
+    };
+
+    await client.messages.create({
+      body: `Phone verification OTP for stackoverflow clone is ${otp}`,
+      from: "+14244002890",
+      to: phone,
+    });
+
+    return res.status(200).json({ message: "OTP sent successfully" });
+  } catch (error) {
+    return res.status(405).json({ message: error.message });
+  }
+};
+
+export const verifyOTP = async (req, res) => {
+  const { phone, enteredOTP } = req.body;
+
+  const user = await users.findOne({ phoneNumber: phone });
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  if (enteredOTP.length !== 4) {
+    return res.status(400).json({ message: "Invalid OTP" });
+  }
+
+  try {
+    if (otpStore[phone] && otpStore[phone].otp === parseInt(enteredOTP, 10)) {
+      const otpValidityTime = 5 * 60 * 1000;
+
+      if (Date.now() - otpStore[phone].timestamp <= otpValidityTime) {
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+          expiresIn: "5m",
+        });
+        res.status(200).json({ message: "OTP verified successfully", token });
+        delete otpStore[phone];
+      } else {
+        res
+          .status(400)
+          .json({ message: "OTP expired. Please request a new OTP." });
+      }
+    } else {
+      res.status(400).json({ message: "Invalid OTP" });
+    }
   } catch (error) {
     return res.status(405).json({ message: error.message });
   }
