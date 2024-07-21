@@ -90,14 +90,14 @@
 
 .nav-links {
   padding: 7px 13px;
-  border: solid 1px blue;
+  border: solid 1px black;
   border-radius: 3px;
-  background-color: #e7f8fe;
+  background-color: rgb(245, 245, 245);
   cursor: pointer;
 }
 
 .nav-links:hover {
-  background-color: #d3e4eb;
+  background-color: rgb(225, 225, 225);
 }
 
 @media screen and (max-width: 1120px) {

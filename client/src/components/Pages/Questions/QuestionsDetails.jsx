@@ -13,10 +13,42 @@ import upvote from "../../../assets/sort-up.svg";
 import Avatar from "../../../components/Avatar/Avatar";
 import DisplayAnswer from "./DisplayAnswer";
 import "./Questions.css";
+import { translations } from "../../../utils/languages";
 
 const QuestionsDetails = () => {
   const { id } = useParams();
   const questionsList = useSelector((state) => state.questionsReducer);
+  const language = useSelector((state) => state.languageReducer);
+  let backgroudColor;
+  switch (language) {
+    case "hi":
+      backgroudColor = "#6ca0b8";
+      break;
+    case "zh":
+      backgroudColor = "#6b8e23";
+      break;
+    case "fr":
+      backgroudColor = "#e0d66c";
+      break;
+    default:
+      backgroudColor = "white";
+      break;
+  }
+  let darkerColor;
+  switch (language) {
+    case "hi":
+      darkerColor = "#4c7a8e";
+      break;
+    case "zh":
+      darkerColor = "#4c5e19";
+      break;
+    case "fr":
+      darkerColor = "#b5a94b";
+      break;
+    default:
+      darkerColor = "white";
+      break;
+  }
 
   const [Answer, setAnswer] = useState("");
   const navigate = useNavigate();
@@ -78,7 +110,7 @@ const QuestionsDetails = () => {
   return (
     <div className="question-details-page">
       {questionsList.data === null ? (
-        <h1>Loading...</h1>
+        <h1>{translations[language].Loading}</h1>
       ) : (
         <>
           {questionsList.data
@@ -115,23 +147,31 @@ const QuestionsDetails = () => {
                       <div className="question-actions-user">
                         <div>
                           <button type="button" onClick={handleShare}>
-                            Share
+                            {translations[language].share}
                           </button>
                           {User?.result?._id === question?.userId && (
                             <button type="button" onClick={handleDelete}>
-                              Delete
+                              {translations[language].delete}
                             </button>
                           )}
                         </div>
                         <div>
-                          <p>asked {moment(question.askedOn).fromNow()}</p>
+                          <p>
+                            {translations[language].asked}{" "}
+                            {moment(question.askedOn).fromNow()}
+                          </p>
                           <Link
                             to={`/Users/${question.userId}`}
                             className="user-link"
-                            style={{ color: "#0086d8" }}
+                            style={{
+                              color:
+                                darkerColor !== "white" ? darkerColor : "black",
+                            }}
                           >
                             <Avatar
-                              backgroundColor="orange"
+                              backgroundColor={
+                                darkerColor !== "white" ? darkerColor : "orange"
+                              }
                               px="8px"
                               py="5px"
                               borderRadius="4px"
@@ -147,7 +187,9 @@ const QuestionsDetails = () => {
                 </section>
                 {question.noOfAnswers !== 0 && (
                   <section>
-                    <h3>{question.noOfAnswers} Answers</h3>
+                    <h3>
+                      {question.noOfAnswers} {translations[language].answers}
+                    </h3>
                     <DisplayAnswer
                       key={question._id}
                       question={question}
@@ -156,7 +198,7 @@ const QuestionsDetails = () => {
                   </section>
                 )}
                 <section className="post-ans-container">
-                  <h3>Your Answer</h3>
+                  <h3>{translations[language].yourAnswer}</h3>
                   <form
                     onSubmit={(e) => {
                       handlePostAns(e, question.answer.length);
@@ -173,25 +215,25 @@ const QuestionsDetails = () => {
                     <br />
                     <input
                       type="submit"
-                      className="post-ans-btn"
-                      value="Post Your Answer"
+                      className={`post-ans-btn ${language}-btn`}
+                      value={translations[language].postanswer}
                     />
                   </form>
                   <p>
-                    Browse other Question tagged
+                    {translations[language].browse}
                     {question.questionTags.map((tag) => (
                       <Link to="/Tags" key={tag} className="ans-tags">
                         {" "}
                         {tag}{" "}
                       </Link>
                     ))}{" "}
-                    or
+                    {translations[language].or}
                     <Link
                       to="/AskQuestion"
-                      style={{ textDecoration: "none", color: "#009dff" }}
+                      style={{ textDecoration: "none", color: backgroudColor }}
                     >
                       {" "}
-                      Ask your own question.
+                      {translations[language].askOwnQuestion}
                     </Link>
                   </p>
                 </section>

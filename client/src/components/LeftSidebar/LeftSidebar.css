@@ -60,3 +60,9 @@
     z-index: 10;
   }
 }
+
+.language-select {
+  width: 100%;
+  cursor: pointer;
+  padding: 10px;
+}

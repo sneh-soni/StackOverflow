@@ -1,5 +1,6 @@
 import Questions from "../models/Questions.js";
 import mongoose from "mongoose";
+import { detectLanguage, translateText } from "../utils/translate.js";
 
 export const AskQuestion = async (req, res) => {
   const postQuestionData = req.body;
@@ -15,8 +16,29 @@ export const AskQuestion = async (req, res) => {
 };
 
 export const getAllQuestions = async (req, res) => {
+  const { language } = req.params;
   try {
     const questionList = await Questions.find().sort({ askedOn: -1 });
+    for (const question of questionList) {
+      if (detectLanguage(question.questionTitle).language !== language) {
+        question.questionTitle = await translateText(
+          question.questionTitle,
+          language
+        );
+      }
+      if (detectLanguage(question.questionBody).language !== language) {
+        question.questionBody = await translateText(
+          question.questionBody,
+          language
+        );
+      }
+      for (const answer of question.answer) {
+        if (detectLanguage(answer.answerBody).language !== language) {
+          answer.answerBody = await translateText(answer.answerBody, language);
+        }
+      }
+    }
+
     return res.status(200).json(questionList);
   } catch (error) {
     return res.status(404).json({ message: error.message });
@@ -31,7 +53,7 @@ export const deleteQuestion = async (req, res) => {
   }
 
   try {
-    await Questions.findByIdAndRemove(_id);
+    await Questions.findByIdAndDelete(_id);
     return res.status(200).json({ message: "successfully deleted..." });
   } catch (error) {
     return res.status(404).json({ message: error.message });

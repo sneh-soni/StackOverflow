@@ -46,8 +46,8 @@
   margin: 3px;
   font-size: 13px;
   border-radius: 2px;
-  background-color: #e1ecf4;
-  color: #39739d;
+  background-color: rgb(225, 225, 225);
+  color: black;
   text-decoration: none;
   line-height: 22px;
 }
@@ -109,6 +109,33 @@
 
 .post-ans-container form .post-ans-btn:hover {
   background-color: #0086d8;
+}
+
+.post-ans-container form .zh-btn {
+  background-color: #6b8e23;
+  border: solid 1px #4c5e19;
+}
+
+.post-ans-container form .zh-btn:hover {
+  background-color: #4c5e19;
+}
+
+.post-ans-container form .hi-btn {
+  background-color: #6ca0b8;
+  border: solid 1px #4c7a8e;
+}
+
+.post-ans-container form .hi-btn:hover {
+  background-color: #4c7a8e;
+}
+
+.post-ans-container form .fr-btn {
+  background-color: #e0d66c;
+  border: solid 1px #b5a94b;
+}
+
+.post-ans-container form .fr-btn:hover {
+  background-color: #b5a94b;
 }
 
 /* Display answer container */

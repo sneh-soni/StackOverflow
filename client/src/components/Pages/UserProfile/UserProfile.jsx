@@ -9,12 +9,14 @@ import LeftSidebar from "../../../components/LeftSidebar/LeftSidebar";
 import EditProfileForm from "./EditProfileForm";
 import ProfileBio from "./ProfileBio";
 import "./UsersProfile.css";
+import { translations } from "../../../utils/languages";
 
 const UserProfile = ({ slideIn, handleSlideIn }) => {
   const { id } = useParams();
   const users = useSelector((state) => state.usersReducer);
   const currentProfile = users.filter((user) => user._id === id)[0];
   const currentUser = useSelector((state) => state.currentUserReducer);
+  const language = useSelector((state) => state.languageReducer);
   const [Switch, setSwitch] = useState(false);
 
   return (
@@ -36,7 +38,8 @@ const UserProfile = ({ slideIn, handleSlideIn }) => {
               <div className="user-name">
                 <h1>{currentProfile?.name}</h1>
                 <p>
-                  <FontAwesomeIcon icon={faBirthdayCake} /> Joined{" "}
+                  <FontAwesomeIcon icon={faBirthdayCake} />{" "}
+                  {translations[language].joined}{" "}
                   {moment(currentProfile?.joinedOn).fromNow()}
                 </p>
               </div>
@@ -47,7 +50,8 @@ const UserProfile = ({ slideIn, handleSlideIn }) => {
                 onClick={() => setSwitch(true)}
                 className="edit-profile-btn"
               >
-                <FontAwesomeIcon icon={faPen} /> Edit Profile
+                <FontAwesomeIcon icon={faPen} />{" "}
+                {translations[language].editProfile}
               </button>
             )}
           </div>

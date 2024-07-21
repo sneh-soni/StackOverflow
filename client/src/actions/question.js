@@ -11,14 +11,16 @@ export const askQuestion = (questionData, navigate) => async (dispatch) => {
   }
 };
 
-export const fetchAllQuestions = () => async (disptach) => {
-  try {
-    const { data } = await api.getAllQuestions();
-    disptach({ type: "FETCH_ALL_QUESTIONS", payload: data });
-  } catch (error) {
-    console.log(error);
-  }
-};
+export const fetchAllQuestions =
+  (language = "en") =>
+  async (disptach) => {
+    try {
+      const { data } = await api.getAllQuestions(language);
+      disptach({ type: "FETCH_ALL_QUESTIONS", payload: data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 export const deleteQuestion = (id, navigate) => async (dispatch) => {
   try {

@@ -3,12 +3,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./HomeMainbar.css";
 import QuestionList from "./QuestionList";
+import { translations } from "../../utils/languages";
 
 const HomeMainbar = () => {
   const location = useLocation();
-  const user = 1;
   const navigate = useNavigate();
-
+  const user = useSelector((state) => state.currentUserReducer);
+  const language = useSelector((state) => state.languageReducer);
   const questionsList = useSelector((state) => state.questionsReducer);
 
   const checkAuth = () => {
@@ -24,20 +25,22 @@ const HomeMainbar = () => {
     <div className="main-bar">
       <div className="main-bar-header">
         {location.pathname === "/" ? (
-          <h1>Top Questions</h1>
+          <h1>{translations[language].TopQ}</h1>
         ) : (
-          <h1>All Questions</h1>
+          <h1>{translations[language].AllQ}</h1>
         )}
-        <button onClick={checkAuth} className="ask-btn">
-          Ask Question
+        <button onClick={checkAuth} className={`ask-btn ${language}-btn`}>
+          {translations[language].AskQ}
         </button>
       </div>
       <div>
         {questionsList.data === null ? (
-          <h1>Loading...</h1>
+          <h1>{translations[language].Loading}</h1>
         ) : (
           <>
-            <p>{questionsList.data.length} questions</p>
+            <p>
+              {questionsList.data.length} {translations[language].questions}
+            </p>
             <QuestionList questionsList={questionsList.data} />
           </>
         )}

@@ -53,3 +53,25 @@
 .review-btn:hover {
   background-color: #0086d8;
 }
+
+.hi-btn {
+  background-color: #6ca0b8;
+  border: solid 1px #4c7a8e;
+}
+.hi-btn:hover {
+  background-color: #4c7a8e;
+}
+.zh-btn {
+  background-color: #6b8e23;
+  border: solid 1px #4c5e19;
+}
+.zh-btn:hover {
+  background-color: #4c5e19;
+}
+.fr-btn {
+  background-color: #e0d66c;
+  border: solid 1px #b5a94b;
+}
+.fr-btn:hover {
+  background-color: #b5a94b;
+}

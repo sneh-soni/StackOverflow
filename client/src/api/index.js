@@ -31,7 +31,8 @@ export const updateProfile = (id, updateData) =>
 
 export const postQuestion = (questionData) =>
   API.post("/questions/Ask", questionData);
-export const getAllQuestions = () => API.get("/questions/get");
+export const getAllQuestions = (language) =>
+  API.get(`/questions/get/${language}`);
 export const deleteQuestion = (id) => API.delete(`/questions/delete/${id}`);
 export const voteQuestion = (id, value) =>
   API.patch(`/questions/vote/${id}`, { value });

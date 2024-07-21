@@ -11,17 +11,17 @@
 }
 
 .widget h4 {
-  background-color: #fbf3d5;
+  background-color: rgb(225, 225, 225);
   margin: 0%;
   padding: 15px;
-  border: solid 1px #f1e5bc;
+  border: solid 1px #d4d3d1;
   font-size: 13px;
 }
 
 .right-sidebar-div-1 {
-  background-color: #fdf7e2;
+  background-color: rgb(245, 245, 245);
   padding: 15px;
-  border: solid 1px #f1e5bc;
+  border: solid 1px #d4d3d1;
 }
 
 .right-sidebar-div-1 .right-sidebar-div-2 {
@@ -38,13 +38,14 @@
 
 .widget-tags {
   margin-top: 40px;
+  background-color: rgb(245, 245, 245);
   box-shadow: 3px 3px 10px rgb(0 0 0 / 5%), -3px -3px 10px rgb(0 0 0 / 5%);
 }
 
 .widget-tags h4 {
   margin: 0%;
   padding: 15px;
-  background-color: #f8f9f9;
+  background-color: rgb(225, 225, 225);
   border: solid 1px #e3e6e8;
   font-size: 13px;
 }
@@ -60,8 +61,8 @@
 
 .widget-tags-div p {
   padding: 5px;
-  background-color: #e1ecf4;
-  color: #39739d;
+  background-color: rgb(225, 225, 225);
+  color: black;
   border-radius: 2px;
   font-size: 13px;
 }

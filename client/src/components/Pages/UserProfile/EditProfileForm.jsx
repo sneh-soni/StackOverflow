@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateProfile } from "../../../actions/users";
 import "./UsersProfile.css";
+import { translations } from "../../../utils/languages";
 
 const EditProfileForm = ({ currentUser, setSwitch }) => {
   const [name, setName] = useState(currentUser?.result?.name);
   const [about, setAbout] = useState(currentUser?.result?.about);
   const [tags, setTags] = useState([]);
   const dispatch = useDispatch();
+  const language = useSelector((state) => state.languageReducer);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,11 +23,13 @@ const EditProfileForm = ({ currentUser, setSwitch }) => {
 
   return (
     <div>
-      <h1 className="edit-profile-title">Edit Your Profile</h1>
-      <h2 className="edit-profile-title-2">Public information</h2>
+      <h1 className="edit-profile-title">{translations[language].edit}</h1>
+      <h2 className="edit-profile-title-2">
+        {translations[language].publicInfo}
+      </h2>
       <form className="edit-profile-form" onSubmit={handleSubmit}>
         <label htmlFor="name">
-          <h3>Display name</h3>
+          <h3>{translations[language].displayName}</h3>
           <input
             type="text"
             value={name}
@@ -33,7 +37,7 @@ const EditProfileForm = ({ currentUser, setSwitch }) => {
           />
         </label>
         <label htmlFor="about">
-          <h3>About me</h3>
+          <h3>{translations[language].aboutMe}</h3>
           <textarea
             id="about"
             cols="30"
@@ -44,7 +48,7 @@ const EditProfileForm = ({ currentUser, setSwitch }) => {
         </label>
         <label htmlFor="tags">
           <h3>Watched tags</h3>
-          <p>Add tags separated by a space</p>
+          <p>{translations[language].addTags}</p>
           <input
             type="text"
             id="tags"
@@ -52,13 +56,17 @@ const EditProfileForm = ({ currentUser, setSwitch }) => {
           />
         </label>
         <br />
-        <input type="submit" value="Save profile" className="user-submit-btn" />
+        <input
+          type="submit"
+          value={translations[language].save}
+          className="user-submit-btn"
+        />
         <button
           type="button"
           className="user-cancel-btn"
           onClick={() => setSwitch(false)}
         >
-          Cancel
+          {translations[language].cancel}
         </button>
       </form>
     </div>
