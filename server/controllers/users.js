@@ -98,6 +98,59 @@ export const sendEmail = async (req, res) => {
   }
 };
 
+export const sendEmailOTP = async (req, res) => {
+  const { email } = req.body;
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({
+      message: "Invalid email format",
+    });
+  }
+
+  const user = await users.findOne({ email });
+
+  if (!user) {
+    return res.status(404).json({
+      message: "User not found",
+    });
+  }
+
+  try {
+    const otp = Math.floor(1000 + Math.random() * 9000);
+    otpStore[email] = {
+      otp: otp,
+      timestamp: Date.now(),
+    };
+
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "ssneh20062003@gmail.com",
+        pass: "ojaqocrwwjkxjbzl",
+      },
+    });
+
+    let mailOptions = {
+      from: "StackOverflow Clone <ssneh20062003@gmail.com>",
+      to: email,
+      subject: "Change website language",
+      html: `<p>Your otp for changing website language is ${otp}. <br/>This otp is only valid for 5 minutes.</p>`,
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        return res.status(500).json({ message: "something went wrong", error });
+      } else {
+        return res.status(200).json({ message: "email sent successfully" });
+      }
+    });
+  } catch (error) {
+    return res.status(405).json({ message: error.message });
+  }
+};
+
 let otpStore = {};
 
 export const sendOTP = async (req, res) => {
@@ -173,6 +226,44 @@ export const verifyOTP = async (req, res) => {
     }
   } catch (error) {
     return res.status(405).json({ message: error.message });
+  }
+};
+
+export const verifyLangOTP = async (req, res) => {
+  const { key, enteredOTP } = req.body;
+
+  const user = await users.findOne({
+    $or: [{ email: key }, { phoneNumber: key }],
+  });
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found", success: false });
+  }
+
+  if (enteredOTP.length !== 4) {
+    return res.status(400).json({ message: "Invalid OTP", success: false });
+  }
+
+  try {
+    if (otpStore[key] && otpStore[key].otp === parseInt(enteredOTP, 10)) {
+      const otpValidityTime = 5 * 60 * 1000;
+
+      if (Date.now() - otpStore[key].timestamp <= otpValidityTime) {
+        res
+          .status(200)
+          .json({ message: "OTP verified successfully", success: true });
+        delete otpStore[key];
+      } else {
+        res.status(400).json({
+          message: "OTP expired. Please request a new OTP.",
+          success: false,
+        });
+      }
+    } else {
+      res.status(400).json({ message: "Invalid OTP", success: false });
+    }
+  } catch (error) {
+    return res.status(405).json({ message: error.message, success: false });
   }
 };
 

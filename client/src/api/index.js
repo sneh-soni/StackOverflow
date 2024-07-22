@@ -20,8 +20,11 @@ export const logIn = (authData) => API.post("/user/login", authData);
 export const signUp = (authData) => API.post("/user/signup", authData);
 
 export const sendEmail = (Data) => API.post("/user/send-email", Data);
+export const sendEmailOTP = (Data) => API.post("/user/send-email-otp", Data);
 export const sendOTP = (Data) => API.post("/user/send-otp", Data);
 export const verifyOTP = (Data) => API.post("/user/verify-otp", Data);
+export const verifyLangOTP = (Data) =>
+  API.post("/user/verify-language-otp", Data);
 export const resetPassword = (token, Data) =>
   API.post(`/user/reset-password/${token}`, Data);
 

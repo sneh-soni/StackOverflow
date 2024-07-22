@@ -5,8 +5,10 @@ import {
   updateProfile,
   sendEmail,
   sendOTP,
+  sendEmailOTP,
   verifyOTP,
   resetPassword,
+  verifyLangOTP,
 } from "../controllers/users.js";
 import auth from "../middleware/auth.js";
 
@@ -16,7 +18,9 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/send-email", sendEmail);
 router.post("/send-otp", sendOTP);
+router.post("/send-email-otp", sendEmailOTP);
 router.post("/verify-otp", verifyOTP);
+router.post("/verify-language-otp", verifyLangOTP);
 router.post("/reset-password/:token", resetPassword);
 
 router.get("/getAllUsers", getAllUsers);

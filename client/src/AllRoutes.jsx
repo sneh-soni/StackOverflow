@@ -12,6 +12,7 @@ import ForgotPassword, {
   VerifyOTP,
 } from "./components/Pages/ForgotPassword/ForgotPassword";
 import ResetPassword from "./components/Pages/ForgotPassword/ResetPassword";
+import { VerifyLangOTP } from "./components/LeftSidebar/LeftSidebar";
 
 const AllRoutes = ({ slideIn, handleSlideIn }) => {
   return (
@@ -48,6 +49,10 @@ const AllRoutes = ({ slideIn, handleSlideIn }) => {
       />
       <Route path="/forgotpassword" element={<ForgotPassword />} />
       <Route path="/verify-otp/:phone" element={<VerifyOTP />} />
+      <Route
+        path="/verify-language-otp/:language/:key"
+        element={<VerifyLangOTP />}
+      />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
     </Routes>
   );
