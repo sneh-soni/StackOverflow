@@ -1,18 +1,18 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
-import Home from "./components/Pages/Home/Home";
-import Auth from "./components/Pages/Auth/Auth";
-import Questions from "./components/Pages/Questions/Questions";
+import { Route, Routes } from "react-router-dom";
+import { VerifyLangOTP } from "./components/LeftSidebar/LeftSidebar";
 import AskQuestion from "./components/Pages/AskQuestion/AskQuestion";
-import DisplayQuestion from "./components/Pages/Questions/DisplayQuestion";
-import Tags from "./components/Pages/Tags/Tags";
-import Users from "./components/Pages/Users/Users";
-import UserProfile from "./components/Pages/UserProfile/UserProfile";
+import Auth from "./components/Pages/Auth/Auth";
 import ForgotPassword, {
   VerifyOTP,
 } from "./components/Pages/ForgotPassword/ForgotPassword";
 import ResetPassword from "./components/Pages/ForgotPassword/ResetPassword";
-import { VerifyLangOTP } from "./components/LeftSidebar/LeftSidebar";
+import Home from "./components/Pages/Home/Home";
+import DisplayQuestion from "./components/Pages/Questions/DisplayQuestion";
+import Questions from "./components/Pages/Questions/Questions";
+import Tags from "./components/Pages/Tags/Tags";
+import UserProfile from "./components/Pages/UserProfile/UserProfile";
+import Users from "./components/Pages/Users/Users";
 
 const AllRoutes = ({ slideIn, handleSlideIn }) => {
   return (

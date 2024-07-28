@@ -18,6 +18,7 @@ const UserProfile = ({ slideIn, handleSlideIn }) => {
   const currentUser = useSelector((state) => state.currentUserReducer);
   const language = useSelector((state) => state.languageReducer);
   const [Switch, setSwitch] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
 
   return (
     <div className="home-container-1">
@@ -45,14 +46,29 @@ const UserProfile = ({ slideIn, handleSlideIn }) => {
               </div>
             </div>
             {currentUser?.result._id === id && (
-              <button
-                type="button"
-                onClick={() => setSwitch(true)}
-                className="edit-profile-btn"
-              >
-                <FontAwesomeIcon icon={faPen} />{" "}
-                {translations[language].editProfile}
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSwitch(true);
+                    setShowHistory(false);
+                  }}
+                  className="edit-profile-btn"
+                >
+                  <FontAwesomeIcon icon={faPen} />{" "}
+                  {translations[language].editProfile}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowHistory(!showHistory);
+                    setSwitch(false);
+                  }}
+                  className="edit-profile-btn"
+                >
+                  {translations[language].loginHistory}
+                </button>
+              </>
             )}
           </div>
           <>
@@ -63,6 +79,41 @@ const UserProfile = ({ slideIn, handleSlideIn }) => {
               />
             ) : (
               <ProfileBio currentProfile={currentProfile} />
+            )}
+            {showHistory && (
+              <div>
+                <h2>{translations[language].loginHistory}</h2>
+                <ul>
+                  {currentUser?.result?.loginHistory.map((history) => {
+                    return (
+                      <div className="login-history">
+                        <p style={{ margin: 0 }}>
+                          Date and time:{" "}
+                          <span className="login-span">
+                            {history.time.slice(0, 10)}{" "}
+                            {history.time.slice(11, 16)}
+                          </span>
+                        </p>
+                        <p style={{ margin: 0 }}>
+                          IP address:{" "}
+                          <span className="login-span">{history.ip}</span>
+                        </p>
+                        <p style={{ margin: 0 }}>
+                          Device:{" "}
+                          <span className="login-span">{history.device}</span>
+                        </p>
+                        <p style={{ margin: 0 }}>
+                          OS: <span className="login-span">{history.os}</span>
+                        </p>
+                        <p style={{ margin: 0 }}>
+                          Browser:{" "}
+                          <span className="login-span">{history.browser}</span>
+                        </p>
+                      </div>
+                    );
+                  })}
+                </ul>
+              </div>
             )}
           </>
         </section>

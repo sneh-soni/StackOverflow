@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./Auth.css";
 import icon from "../../../assets/icon.png";
 import AboutAuth from "./AboutAuth";
 import { signup, login } from "../../../actions/auth";
+import { sendEmailOTP, verifyLangOTP } from "../../../api";
 
 const Auth = () => {
   const [isSignup, setIsSignup] = useState(false);
@@ -12,9 +13,58 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [showOTP, setShowOTP] = useState(false);
+  const [OTPSent, setOTPSent] = useState(false);
+  const [enteredOTP, setEnteredOTP] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  async function getSystemDetails() {
+    const os = getOS();
+    const browser = getBrowser();
+    const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
+    const ip = await getIPAddress();
+
+    return [
+      {
+        time: new Date().toISOString(),
+        ip,
+        os,
+        browser,
+        device: isMobile ? "mobile" : "desktop",
+      },
+    ];
+  }
+
+  function getOS() {
+    const platform = navigator.platform;
+    if (platform.indexOf("Win") > -1) return "Windows";
+    if (platform.indexOf("Mac") > -1) return "MacOS";
+    if (platform.indexOf("Linux") > -1) return "Linux";
+    return "Unknown";
+  }
+
+  function getBrowser() {
+    const userAgent = navigator.userAgent;
+    if (userAgent.indexOf("Chrome") > -1) return "Google Chrome";
+    if (userAgent.indexOf("Safari") > -1) return "Safari";
+    if (userAgent.indexOf("Edge") > -1) return "MS Edge";
+    if (userAgent.indexOf("Firefox") > -1) return "Mozilla Firefox";
+    if (userAgent.indexOf("MSIE") > -1 || !!document.documentMode)
+      return "MS IE";
+    return "Unknown";
+  }
+
+  async function getIPAddress() {
+    try {
+      const response = await fetch("https://api.ipify.org?format=json");
+      const data = await response.json();
+      return data.ip.toString();
+    } catch (error) {
+      return "Unknown";
+    }
+  }
 
   const handleSwitch = () => {
     setIsSignup(!isSignup);
@@ -24,11 +74,16 @@ const Auth = () => {
     setPassword("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email && !password) {
       alert("Enter email and password");
     }
+    const hour = new Date().getHours();
+    if (loginDetails[0].device === "mobile" && hour >= 10 && hour <= 13) {
+      return;
+    }
+    const loginDetails = await getSystemDetails();
     if (isSignup) {
       if (!name || !phone) {
         alert("All fields are mandatory");
@@ -37,9 +92,56 @@ const Auth = () => {
         alert("Invalid phone number");
         return;
       }
-      dispatch(signup({ name, email, password, phone }, navigate));
+      if (OTPSent) {
+        const { data } = await verifyLangOTP({
+          key: email,
+          enteredOTP,
+        });
+        if (data?.success === true) {
+          dispatch(
+            signup({ name, email, password, phone, loginDetails }, navigate)
+          );
+          navigate("/");
+        } else {
+          alert(data.message);
+          navigate("/Auth");
+        }
+        return;
+      }
+      if (loginDetails[0].browser === "Google Chrome" && !OTPSent) {
+        await sendEmailOTP({ email, isLogin: true });
+        alert("OTP sent to " + email + " (valid for 5 minutes)");
+        setShowOTP(true);
+        setOTPSent(true);
+      } else {
+        setShowOTP(false);
+        dispatch(
+          signup({ name, email, password, phone, loginDetails }, navigate)
+        );
+      }
     } else {
-      dispatch(login({ email, password }, navigate));
+      if (OTPSent) {
+        const { data } = await verifyLangOTP({
+          key: email,
+          enteredOTP,
+        });
+        if (data?.success === true) {
+          dispatch(login({ email, password, loginDetails }, navigate));
+        } else {
+          alert(data.message);
+          navigate("/Auth");
+        }
+        return;
+      }
+      if (loginDetails[0].browser === "Google Chrome") {
+        await sendEmailOTP({ email, isLogin: true });
+        alert("OTP sent to " + email + " (valid for 5 minutes)");
+        setShowOTP(true);
+        setOTPSent(true);
+      } else {
+        setShowOTP(false);
+        dispatch(login({ email, password, loginDetails }, navigate));
+      }
     }
   };
 
@@ -118,6 +220,20 @@ const Auth = () => {
               }}
             />
           </label>
+          {showOTP && (
+            <label htmlFor="otp">
+              <input
+                placeholder="XXXX"
+                type="text"
+                name="otp"
+                id="otp"
+                value={enteredOTP}
+                onChange={(e) => {
+                  setEnteredOTP(e.target.value);
+                }}
+              />
+            </label>
+          )}
           <button type="submit" className="auth-btn">
             {isSignup ? "Sign up" : "Log in"}
           </button>

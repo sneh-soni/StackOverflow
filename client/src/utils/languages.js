@@ -88,6 +88,7 @@ export const translations = {
     addTags: "Add tags separated by a space",
     save: "Save profile",
     cancel: "Cancel",
+    loginHistory: "Login History",
   },
 
   es: {
@@ -152,6 +153,7 @@ export const translations = {
     addTags: "Agregar etiquetas separadas por espacio",
     save: "Guardar perfil",
     cancel: "Cancelar",
+    loginHistory: "Historial de inicio de sesión",
   },
 
   hi: {
@@ -214,6 +216,7 @@ export const translations = {
     addTags: "अंतरित स्थान द्वारा टैग जोड़ें",
     save: "प्रोफ़ाइल सहेजें",
     cancel: "रद्द करें",
+    loginHistory: "लॉगिन इतिहास",
   },
 
   pt: {
@@ -278,6 +281,7 @@ export const translations = {
     addTags: "Adicionar tags separadas por espaço",
     save: "Salvar perfil",
     cancel: "Cancelar",
+    loginHistory: "Histórico de login",
   },
 
   zh: {
@@ -335,6 +339,7 @@ export const translations = {
     addTags: "添加以空格分隔的标签",
     save: "保存个人资料",
     cancel: "取消",
+    loginHistory: "登录记录",
   },
 
   fr: {
@@ -400,5 +405,6 @@ export const translations = {
     addTags: "Ajouter des tags séparés par un espace",
     save: "Enregistrer le profil",
     cancel: "Annuler",
+    loginHistory: "Historique de connexion",
   },
 };

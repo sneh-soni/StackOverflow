@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import users from "../models/auth.js";
 
 export const signup = async (req, res) => {
-  const { name, email, password, phone } = req.body;
+  const { name, email, password, phone, loginDetails } = req.body;
   try {
     const existinguser = await users.findOne({ email });
     if (existinguser) {
@@ -15,6 +15,7 @@ export const signup = async (req, res) => {
       email,
       password: hashedPassword,
       phoneNumber: phone,
+      loginHistory: [loginDetails[0]],
     });
     const token = jwt.sign(
       { email: newUser.email, id: newUser._id },
@@ -28,7 +29,7 @@ export const signup = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, loginDetails } = req.body;
   try {
     const existinguser = await users.findOne({ email });
     if (!existinguser) {
@@ -38,6 +39,8 @@ export const login = async (req, res) => {
     if (!isPasswordCrt) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
+    existinguser.loginHistory.push(loginDetails[0]);
+    await existinguser.save();
     const token = jwt.sign(
       { email: existinguser.email, id: existinguser._id },
       process.env.JWT_SECRET,

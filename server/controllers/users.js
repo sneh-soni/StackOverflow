@@ -99,7 +99,7 @@ export const sendEmail = async (req, res) => {
 };
 
 export const sendEmailOTP = async (req, res) => {
-  const { email } = req.body;
+  const { email, isLogin = false } = req.body;
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -135,8 +135,8 @@ export const sendEmailOTP = async (req, res) => {
     let mailOptions = {
       from: "StackOverflow Clone <ssneh20062003@gmail.com>",
       to: email,
-      subject: "Change website language",
-      html: `<p>Your otp for changing website language is ${otp}. <br/>This otp is only valid for 5 minutes.</p>`,
+      subject: isLogin ? "Login OTP" : "Change website language",
+      html: `<p>Your otp is ${otp}. <br/>This otp is only valid for 5 minutes.</p>`,
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
