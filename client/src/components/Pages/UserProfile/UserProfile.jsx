@@ -86,7 +86,7 @@ const UserProfile = ({ slideIn, handleSlideIn }) => {
                 <ul>
                   {currentUser?.result?.loginHistory.map((history) => {
                     return (
-                      <div className="login-history">
+                      <div key={history.time} className="login-history">
                         <p style={{ margin: 0 }}>
                           Date and time:{" "}
                           <span className="login-span">

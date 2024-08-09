@@ -80,10 +80,13 @@ const Auth = () => {
       alert("Enter email and password");
     }
     const hour = new Date().getHours();
+    const loginDetails = await getSystemDetails();
     if (loginDetails[0].device === "mobile" && hour >= 10 && hour <= 13) {
+      alert(
+        "It is not allowed to access the website with mobile device form 10AM to 1PM"
+      );
       return;
     }
-    const loginDetails = await getSystemDetails();
     if (isSignup) {
       if (!name || !phone) {
         alert("All fields are mandatory");
@@ -222,6 +225,7 @@ const Auth = () => {
           </label>
           {showOTP && (
             <label htmlFor="otp">
+              <h4>Verify OTP</h4>
               <input
                 placeholder="XXXX"
                 type="text"

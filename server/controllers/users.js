@@ -68,8 +68,7 @@ export const sendEmail = async (req, res) => {
       expiresIn: "1h",
     });
 
-    // const resetLink = `https://stack-overflow-two-xi.vercel.app/reset-password/${token}`;
-    const resetLink = `http://localhost:3000/reset-password/${token}`;
+    const resetLink = `https://stack-overflow-two-xi.vercel.app/reset-password/${token}`;
 
     let transporter = nodemailer.createTransport({
       service: "gmail",
